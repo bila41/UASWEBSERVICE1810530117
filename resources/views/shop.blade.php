@@ -28,10 +28,10 @@
             <li><a href="/home">Home</a></li>
             <li class="nav-item">
                 <?php
-                $pesanan_utama = \App\Pesanan::where('user_id', Auth::user()->id)->where('status',0)->first();
+                $pesanan_utama = App\Pesanan::where('user_id', Auth::user()->id)->where('status',0)->first();
                     if(!empty($pesanan_utama))
                         {
-                        $notif = \App\Pesanan_detail::where('pesanan_id', $pesanan_utama->id)->count();}?>
+                        $notif = App\Pesanan_detail::where('pesanan_id', $pesanan_utama->id)->count();}?>
                                 <a class="nav-link" href="{{ url('cart') }}">
                                     <i class="fa fa-shopping-cart">Cart </i>
                                     @if(!empty($notif))
