@@ -52,7 +52,7 @@ class barangController extends Controller
     {
         $validasi = Validator::make($request->all(), [
             "id" => "required|integer",
-            "nama" => "required",
+            "nama_barang" => "required",
             "harga" => "required|integer",
             "stok" => "required|integer",
             "keterangan" => "required",
@@ -85,7 +85,7 @@ class barangController extends Controller
 
             $validasi = Validator::make($request->all(), [
             "id" => "required|integer",
-            "nama" => "required",
+            "nama_barang" => "required",
             "harga" => "required|integer",
             "stok" => "required|integer",
             "keterangan" => "required",
