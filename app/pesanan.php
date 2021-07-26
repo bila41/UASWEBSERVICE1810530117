@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Pesanan extends Model
 {
+	protected $fillable = ['Nomor_Resi'];
     public function user()
 	{
 	      return $this->belongsTo('App\User','user_id', 'id');

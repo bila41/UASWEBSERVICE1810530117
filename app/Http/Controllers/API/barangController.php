@@ -9,14 +9,19 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 class barangController extends Controller
 {
+    
     public function index()
     {
         return Barang::all();
     }
 
-    public function show($id)
+    public function show($barang)
     {
-        $barang = Barang::where('id', $id)->first();
+        $barang = Barang::where('id', $barang)->first();
+        return response()->json([
+            'pesan' => 'Data Berhasil ditemukan',
+            'data' => $barang
+        ], 200);
 
         if (empty($barang)) {
             return response()->json([
@@ -31,9 +36,9 @@ class barangController extends Controller
         ], 200);
     }
 
-    public function deletebarang($id)
+    public function delete($barang)
     {
-        $barang = Barang::where('id', $id)->first();
+        $barang = Barang::where('id', $barang)->first();
 
         if (empty($barang)) {
             return response()->json([
@@ -41,69 +46,59 @@ class barangController extends Controller
                 'data' => ''
             ], 404);
         }
-        $detail->delete();
+        $barang->delete();
         return response()->json([
             'pesan' => 'Data Berhasil Dihapus',
             'data' => $barang
         ], 200);
     }
 
-    public function tambahbarang(Request $request)
+    public function store(Request $request)
     {
         $validasi = Validator::make($request->all(), [
-            "id" => "required|integer",
+            "id" => "required",
             "nama_barang" => "required",
-            "harga" => "required|integer",
-            "stok" => "required|integer",
-            "keterangan" => "required",
-            "gambar" => "required"
-            
+            "stok" => "required",
+            "harga" => "required",
+            "gambar" => "required",
+            "keterangan" => "required"
         ]);
 
-        if ($validasi->passes()) {
+        if ($validasi->passes()){
+            $barang = Barang::create($request->all());
             return response()->json([
-                'pesan' => "Data Berhasil disimpan",
-                'data' => Barang::create($request->all())
-            ]);
+                'pesan' => 'Data Berhasil ditambahkan',
+                'data' => $barang
+            ], 200);
         }
         return response()->json([
-            'pesan' => 'Data Gagal ditambahkan',
+            'pesan' => 'Data Gagal disimpan',
             'data' => $validasi->errors()->all()
-        ], 404);
+        ], 400); 
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, $barang)
     {
-        $data = Barang::where('id', $id)->first();
-
-        if (empty($id)) {
-            return response()->json([
-                'pesan' => 'Data Tidak Ditemukan',
-                'data' => ''
-            ], 404);
-        } else {
-
+        $barang= Barang::where('id',$barang)->first();
+        if (!empty($barang)) {
             $validasi = Validator::make($request->all(), [
-            "id" => "required|integer",
-            "nama_barang" => "required",
-            "harga" => "required|integer",
-            "stok" => "required|integer",
-            "keterangan" => "required",
-            "gambar" => "required"
+                "nama_barang" => "required",
+                "stok" => "required",
+                "harga" => "required",
+                "gambar" => "required",
+                "keterangan" => "required"
             ]);
-
-            if ($validasi->passes()) {
+            if ($validasi->passes()){
+                $barang ->update($request->all());
                 return response()->json([
-                    'pesan' => "Data Berhasil disimpan",
-                    'data' => $id->update($request->all())
-                ]);
-            } else {
-                return response()->json([
-                    'pesan' => 'Data Gagal di Update',
-                    'data' => $validasi->errors()->all()
-                ], 404);
+                    'pesan' => 'Data Berhasil ditambahkan',
+                    'data' => $barang
+                ], 200);
             }
+            return response()->json([
+                'pesan' => 'Data Gagal disimpan',
+                'data' => $validasi->errors()->all()
+            ], 400);    
         }
     }
-
 }
